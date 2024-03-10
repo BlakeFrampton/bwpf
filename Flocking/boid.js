@@ -2,7 +2,7 @@ let perceptionRadius = 100;
 let MaxForce = 0.5;
 
 class boid{
-    constructor(x,y){
+    constructor(){
         this.position= createVector(random(width), random(height));
         this.velocity = createVector();
         this.velocity = p5.Vector.random2D(); 
@@ -53,7 +53,7 @@ class boid{
             if (this !== other && distance <= perceptionRadius){
                 currentForce = p5.Vector.sub(this.position, other.position);
                 if (distance > 0){
-                currentForce.div(distance ^ 2);
+                currentForce.div(pow(distance, 2));
                 }
                 force.add(currentForce);
             }
@@ -67,9 +67,9 @@ class boid{
 
     update(flock){
         this.acceleration.setMag(0);
-        this.acceleration.add(this.alignment(flock).mult(alignmentSlider.value()));
-        this.acceleration.add(this.cohesion(flock)).mult(cohesionSlider.value());
+        this.acceleration.add(this.cohesion(flock).mult(cohesionSlider.value()));
         this.acceleration.add(this.separation(flock).mult(separationSlider.value()));
+        this.acceleration.add(this.alignment(flock).mult(alignmentSlider.value()));
 
         this.velocity.add(this.acceleration);
         this.velocity.setMag(4);
