@@ -16,8 +16,13 @@ function draw() {
   lights();
   noStroke();
   rotateX(-angle);
-  rotateY(angle);
-  rotate(angle/2);
+  rotateY(angle *0.7);
+  rotate(angle * 1.2);
+  rotateZ(angle * 0.3);
+ 
+  ambientMaterial(25, 50, 150);
+  specularMaterial(100, 50, 200);
+  shininess(180);
   subCube(min(width, height)/6, 1);
 
   angle += 0.01;
