@@ -62,6 +62,7 @@ class boid{
         }
         }
         force.limit(MaxForce);
+        force.mult(1.5);
         return force;
     }
 
@@ -77,10 +78,19 @@ class boid{
     }
 
     show() {
-        strokeWeight(16);
+        strokeWeight(15);
         stroke(255);
         this.LoopEdges();
-        point(this.position.x, this.position.y);
+        push();
+        translate(this.position.x, this.position.y);
+        
+        rotate(atan(this.velocity.y/this.velocity.x));
+        if (this.velocity.x < 0){
+           rotate(PI);
+        }
+        fill(220);
+        triangle(-0.5,0.5, -0.5,-0.5,1,0);
+        pop();
     }
 
     LoopEdges(){
