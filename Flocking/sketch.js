@@ -32,6 +32,7 @@ function setup() {
   flock.push(new boid);
   }
 }
+
 function draw() {
   populationSlider.input(updatePopulation);
   background(44, 160, 224);
