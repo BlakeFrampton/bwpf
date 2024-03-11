@@ -13,8 +13,7 @@ class boid{
         let force = createVector();
         let NumOfLocals = 0;
         for (let other of flock){
-            let distance = dist(this.position.x, this.position.y, other.position.x, other.position.y);
-            if (this !== other && distance <= perceptionRadius){
+            if (this.includeBoid(other, perceptionRadius)){
                 force.add(other.velocity);
                 NumOfLocals++;
             }
@@ -30,8 +29,7 @@ class boid{
         let force = createVector();
         let NumOfLocals = 0;
         for (let other of flock){
-            let distance = dist(this.position.x, this.position.y, other.position.x, other.position.y);
-            if (this !== other && distance <= perceptionRadius){
+            if (this.includeBoid(other,perceptionRadius)){
                 force.add(other.position);
                 NumOfLocals++;
             }
@@ -49,9 +47,9 @@ class boid{
         let NumOfLocals = 0;
         let currentForce = createVector();
         for (let other of flock){
-            let distance = dist(this.position.x, this.position.y, other.position.x, other.position.y);
-            if (this !== other && distance <= perceptionRadius){
+            if (this.includeBoid(other, perceptionRadius)){
                 currentForce = p5.Vector.sub(this.position, other.position);
+                let distance = dist(this.position.x, this.position.y, other.position.x, other.position.y)
                 if (distance > 0){
                 currentForce.div(pow(distance, 2));
                 }
@@ -62,15 +60,44 @@ class boid{
         }
         }
         force.limit(MaxForce);
-        force.mult(1.5);
+        force.mult(2);
         return force;
     }
 
+    includeBoid(other, perceptionDist){
+        let distance = dist(this.position.x, this.position.y, other.position.x, other.position.y)
+        if (this !== other && distance <= perceptionDist){
+            return true;
+        }
+        return false;
+    }
+
+    avoidMouse(){
+        let force = createVector();
+        let mousePos = createVector();
+        mousePos.x = mouseX;
+        mousePos.y = mouseY;
+        let distance = dist(this.position.x, this.position.y, mouseX, mouseY);
+        if (distance <= perceptionRadius){
+            force = p5.Vector.sub(this.position, mousePos);
+            if (distance > 0){
+            force.div(distance);
+            }
+        }
+        return force;
+    }
+    
+
     update(flock){
-        this.acceleration.setMag(0);
+        push();
+        stroke(255,80,40);
+        point(mouseX, mouseY);
+        pop();
+        this.acceleration.mult(0);
         this.acceleration.add(this.cohesion(flock).mult(cohesionSlider.value()));
         this.acceleration.add(this.separation(flock).mult(separationSlider.value()));
         this.acceleration.add(this.alignment(flock).mult(alignmentSlider.value()));
+        this.acceleration.add(this.avoidMouse());
 
         this.velocity.add(this.acceleration);
         this.velocity.setMag(4);
@@ -79,7 +106,7 @@ class boid{
 
     show() {
         strokeWeight(15);
-        stroke(255);
+        stroke(250);
         this.LoopEdges();
         push();
         translate(this.position.x, this.position.y);

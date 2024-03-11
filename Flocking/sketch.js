@@ -32,11 +32,9 @@ function setup() {
   flock.push(new boid);
   }
 }
-
 function draw() {
   populationSlider.input(updatePopulation);
-
-  background(220);
+  background(44, 160, 224);
   for (let thisBoid of flock){
     thisBoid.update(flock);
   }
