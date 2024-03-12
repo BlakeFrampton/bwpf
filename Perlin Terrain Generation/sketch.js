@@ -14,11 +14,12 @@ function setup() {
 }
 
 function draw() {
- // emissiveMaterial(100,0,0);
+  fill(255);
   background(abs(FlightDist)%150, 10, 150 -abs(FlightDist)%150);
   stroke(0);
+  //noStroke();
   rotateX(PI /3 );
-  translate(-gridWidth * tileSize/2 , -gridHeight * tileSize/2 - 1500, -200);
+  translate(-gridWidth * tileSize/2 , -gridHeight * tileSize/2 - 1500, -500);
   for (let y =0;y< gridHeight -1; y++){
     beginShape(TRIANGLE_STRIP);
     for (let x = 0; x < gridWidth; x++){
