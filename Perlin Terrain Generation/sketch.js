@@ -14,10 +14,9 @@ function setup() {
 }
 
 function draw() {
-
-  background(0);
-  stroke(255);
-  noFill();
+ // emissiveMaterial(100,0,0);
+  background(abs(FlightDist)%150, 10, 150 -abs(FlightDist)%150);
+  stroke(0);
   rotateX(PI /3 );
   translate(-gridWidth * tileSize/2 , -gridHeight * tileSize/2 - 1500, -200);
   for (let y =0;y< gridHeight -1; y++){
