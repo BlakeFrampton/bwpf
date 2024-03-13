@@ -11,6 +11,7 @@ function setup() {
   cohesionSlider = createSlider(0, 2, 1, 0,1);
   separationSlider = createSlider(0, 2, 1, 0,1);
   populationSlider = createSlider(1, 300, 100, 1);
+  cursorRepelSlider = createSlider(-1, 1, 1, 1);
 
   let AlignmentLabel = createSpan('Alignment');
   AlignmentLabel.position(width-120, 20);
@@ -27,6 +28,10 @@ function setup() {
   let PopulationLabel = createSpan('Population');
   PopulationLabel.position(width-120, 170);
   populationSlider.position(width-150, 190);
+
+  let cursorRepelLabel = createSpan('Cursor Repel');
+  cursorRepelLabel.position(width - 120, 220);
+  cursorRepelSlider.position(width-150, 240);
 
   for (i=0; i < populationSlider.value(); i++){
   flock.push(new boid);

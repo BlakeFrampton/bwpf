@@ -89,15 +89,25 @@ class boid{
     
 
     update(flock){
+        let cursorRepelForce = createVector();
         push();
-        stroke(255,80,40);
-        point(mouseX, mouseY);
+        cursorRepelForce = this.avoidMouse();
+        if (cursorRepelSlider.value() == 1){
+            stroke(255,80,40);
+            point(mouseX, mouseY);
+        }else if (cursorRepelSlider.value() == 0){
+            cursorRepelForce.mult(0);
+        }else if (cursorRepelSlider.value() == -1){
+            cursorRepelForce.mult(-1);
+            stroke(80, 255, 40);
+            point(mouseX, mouseY);
+        }
         pop();
         this.acceleration.mult(0);
         this.acceleration.add(this.cohesion(flock).mult(cohesionSlider.value()));
         this.acceleration.add(this.separation(flock).mult(separationSlider.value()));
         this.acceleration.add(this.alignment(flock).mult(alignmentSlider.value()));
-        this.acceleration.add(this.avoidMouse());
+        this.acceleration.add(cursorRepelForce);
 
         this.velocity.add(this.acceleration);
         this.velocity.setMag(4);
