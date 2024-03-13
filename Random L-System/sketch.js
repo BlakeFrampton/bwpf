@@ -85,6 +85,10 @@ function mouseClicked(){
   generateShape();
 }
 
+function touchStarted(){
+  generateShape();
+}
+
 function generateShape(){
   axiom = setInitialAxiom();
 
