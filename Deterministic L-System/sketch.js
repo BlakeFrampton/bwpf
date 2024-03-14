@@ -30,12 +30,15 @@ function setup() {
   systemSelect.position(5, 60);
   systemSelect.option("Leaf");
   systemSelect.option("Bush");
+  systemSelect.option("Bush 2");
+  systemSelect.option("Dragon Curve");
+  systemSelect.option("Hilbert");
 
-  totalIterationsSlider = createSlider(0, 30, 5, 1);
+  totalIterationsSlider = createSlider(0, 15, 15, 1);
   totalIterationsSlider.position(width -140, 30);
 
   lineLengthSlider = createSlider(1, 20, 5, 0,0.5);
-  lineLengthSlider.position(width-140, 90)
+  lineLengthSlider.position(width-140, 90);
 
   lineLengthScaleFactorSlider = createSlider(1, 2, 1.2, 0.01);
   lineLengthScaleFactorSlider.position(width-140, 150);
@@ -47,7 +50,26 @@ function setup() {
   angleSlider.position(width-140, 270);
 
   systemSelect.changed(() => {
-    totalIterationsSlider.value(5);
+    switch(systemSelect.value()){
+      case "Leaf":
+        totalIterationsSlider.value(15);
+        angleSlider.value(30);
+      case "Bush":
+        totalIterationsSlider.value(6);
+        angleSlider.value(25.7);
+        break;
+      case "Bush 2":
+        totalIterationsSlider.value(5);
+        angleSlider.value(22.5);
+        break;
+      case "Dragon Curve":
+        totalIterationsSlider.value(10);
+        angleSlider.value(90);
+        break;
+      case "Hilbert":
+        totalIterationsSlider.value(7);
+        angleSlider.value(90);
+    }
   })
 }
 
@@ -90,7 +112,7 @@ function draw() {
   for (let i = 0; i < iterations; i++){
     axiom = Iterate(axiom);
     }
-  translate(width/2, height);
+  setStartPosition();
   rotate(180);
   console.log(axiom);
   printShape(axiom);
@@ -158,6 +180,12 @@ function rules(char){
       return leaf(char);
     case "Bush":
       return bush(char);
+    case "Bush 2":
+      return bush2(char);
+    case "Dragon Curve":
+      return dragonCurve(char);
+    case "Hilbert":
+      return hilbert(char);
     default:
       return "";
   }
@@ -169,6 +197,26 @@ function setInitialAxiom(){
       return "a";
     case "Bush":
       return "Y";
+    case "Bush 2":
+      return "F";
+    case "Dragon Curve":
+      return "FX";
+    case "Hilbert":
+      return "X";
+  }
+}
+
+function setStartPosition(){
+  switch(systemSelect.selected()){
+    case "Dragon Curve":
+      translate(width/2, height/2);
+      break;
+    case "Hilbert":
+      translate(0,height);
+      break;
+    default:
+      translate(width/2, height);
+      break;
   }
 }
 
@@ -176,6 +224,8 @@ function capIterations(){
   switch(systemSelect.selected()){
     case "Bush":
       return min(totalIterations, 8);
+    case "Bush 2":
+      return min(totalIterations, 6);
     default:
       return totalIterations;
   }
@@ -204,6 +254,37 @@ function bush(char){
       return "X[-FFF][+FFF]FX";
     case "Y":
       return "YFX[+Y][-Y]";
+    default:
+      return char;
+  }
+}
+
+function bush2(char){
+  switch(char){
+    case "F":
+      return "FF+[+F-F-F]-[-F+F+F]"
+    default:
+      return char;
+  }
+}
+
+function dragonCurve(char){
+  switch(char){
+    case "X":
+      return "X+YF+";
+    case "Y":
+      return "-FX-Y";
+    default:
+      return char;
+  }
+}
+
+function hilbert(char){
+  switch(char){
+    case "X":
+      return "-YF+XFX+FY-";
+    case "Y":
+      return "+XF-YFY-FX+";
     default:
       return char;
   }
