@@ -8,26 +8,56 @@ main {
   position:absolute;
 
   display: grid;
-  grid-template-columns: repeat(11, 1fr);
+  grid-template-columns: repeat(6, 1fr);
 
-  section{
-    grid-column: 2 / 8;
-
-  }
 
   header{
     border-radius: 25px;
-    background: rgb(39, 39, 39);
+    border: 2px solid rgb(39, 39, 39);
+    color: white;
     padding: 20px;
     text-align: center;
 
-    grid-column: 3 / 10;
+    grid-column: 2 / 6;
   }
 
   h1{
     grid-column-start: 3;
     grid-column-end:unset 7;
   }
+
+  .container{
+    position:relative;
+    text-align: center;
+  }
+
+  .link{
+    color: white;
+  }
+
+  .centered{
+
+  }
+
+  img {
+    transform: scale(1);
+    filter:brightness(80%);
+    transition: filter 0.4s, transform 0.4s;
+    max-width: 100%;
+    height:auto;
+    border-radius: 25px;
+  }
+
+  img:hover{
+    transform:scale(1.1);
+    filter:brightness(100%);
+
+  }
+
+  #flocking-link{
+    grid-area:3/ 2/ span 1/ span 2;  /*row, col, row, col*/
+  }
+
 }
 
 canvas {
