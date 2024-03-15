@@ -23,7 +23,7 @@ function draw() {
   ambientMaterial(25, 50, 150);
   specularMaterial(100, 50, 200);
   shininess(180);
-  subCube(min(width, height)/6, 1);
+  subCube(min(width, height)/7, 1);
 
   angle += 0.01;
 }

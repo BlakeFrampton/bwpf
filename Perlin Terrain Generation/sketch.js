@@ -15,9 +15,8 @@ function setup() {
 
 function draw() {
   fill(255);
-  background(abs(FlightDist)%150, 10, 150 -abs(FlightDist)%150);
+  background(150* (sin(FlightDist/100)+ 1) / 2 , 10, 150* (cos(FlightDist/50) + 1)/ 2);
   stroke(0);
-  //noStroke();
   rotateX(PI /3 );
   translate(-gridWidth * tileSize/2 , -gridHeight * tileSize/2 - 1500, -500);
   for (let y =0;y< gridHeight -1; y++){

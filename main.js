@@ -28,13 +28,13 @@ function addStar(){
     const material = new THREE.MeshStandardMaterial({color: 0xffffff})
     const star = new THREE.Mesh(geometry, material);
 
-    const [x,y,z] = Array(3).fill().map(() => THREE.MathUtils.randFloatSpread(100));
+    const [x,y,z] = Array(3).fill().map(() => THREE.MathUtils.randFloatSpread(200));
 
     star.position.set(x,y,z);
     scene.add(star);
 }
 
-Array(200).fill().forEach(addStar);
+Array(400).fill().forEach(addStar);
 
 const spaceTexture = new THREE.TextureLoader().load('Assets/Space Background 2.jpg');
 spaceTexture.generateMipmaps = false;
@@ -58,9 +58,15 @@ scene.add(languageCube);
 languageCube.position.z = 30;
 languageCube.position.x = -10;
 
+
 moveCamera();
 animate();
 document.body.onscroll = moveCamera;
+
+
+
+
+
 
 function moveCamera(){
     const t = document.body.getBoundingClientRect().top;
@@ -70,9 +76,9 @@ function moveCamera(){
 
     saturnParts[0].rotation.y = t * 0.01;
 
-    camera.position.z = 30 + t * -0.01;
-    camera.position.x = t * 0.002;
-    camera.position.y = t * -0.002;
+    camera.position.z = 30 + t * -0.002;
+    camera.position.x = -t * 0.01;
+    camera.position.y = t * -0.005;
 }
 
 
