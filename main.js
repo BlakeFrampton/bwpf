@@ -17,7 +17,7 @@ initialiseLights();
 
 //remove from here to...
 // const gridHelper = new THREE.GridHelper(200, 50);
-// scene.add( gridHelper);
+// scene.add( gridHelper);s
 //...here for release versions. These are debugging tools
 
 const controls = new OrbitControls(camera, renderer.domElement);
@@ -28,15 +28,15 @@ function addStar(){
     const material = new THREE.MeshStandardMaterial({color: 0xffffff})
     const star = new THREE.Mesh(geometry, material);
 
-    const [x,y,z] = Array(3).fill().map(() => THREE.MathUtils.randFloatSpread(100));
+    const [x,y,z] = Array(3).fill().map(() => THREE.MathUtils.randFloatSpread(200));
 
     star.position.set(x,y,z);
     scene.add(star);
 }
 
-Array(200).fill().forEach(addStar);
+Array(400).fill().forEach(addStar);
 
-const spaceTexture = new THREE.TextureLoader().load('Textures/Space Background 2.jpg');
+const spaceTexture = new THREE.TextureLoader().load('Assets/Space Background 2.jpg');
 spaceTexture.generateMipmaps = false;
 spaceTexture.minFilter = THREE.LinearFilter;
 spaceTexture.magFilter = THREE.LinearFilter;
@@ -46,7 +46,7 @@ scene.background = spaceTexture;
 
 const saturnParts = createSaturn();
 
-const jsTexture = new THREE.TextureLoader().load('Textures/JavaScript.png');
+const jsTexture = new THREE.TextureLoader().load('Assets/JavaScript.png');
 
 const languageCube = new THREE.Mesh(
     new THREE.BoxGeometry(3,3,3),
@@ -58,9 +58,15 @@ scene.add(languageCube);
 languageCube.position.z = 30;
 languageCube.position.x = -10;
 
+
 moveCamera();
 animate();
 document.body.onscroll = moveCamera;
+
+
+
+
+
 
 function moveCamera(){
     const t = document.body.getBoundingClientRect().top;
@@ -70,9 +76,9 @@ function moveCamera(){
 
     saturnParts[0].rotation.y = t * 0.01;
 
-    camera.position.z = 30 + t * -0.01;
-    camera.position.x = t * 0.002;
-    camera.position.y = t * -0.002;
+    camera.position.z = 30 + t * -0.002;
+    camera.position.x = -t * 0.01;
+    camera.position.y = t * -0.005;
 }
 
 
@@ -101,8 +107,8 @@ function initialiseLights(){
 
 
 function createSaturn(){
-    const saturnTexture = new THREE.TextureLoader().load('Textures/Saturn.jpg');
-    const saturnNormal = new THREE.TextureLoader().load('Textures/Saturn Normal Map.jpg');
+    const saturnTexture = new THREE.TextureLoader().load('Assets/Saturn.jpg');
+    const saturnNormal = new THREE.TextureLoader().load('Assets/Saturn Normal Map.jpg');
     
     const saturn = new THREE.Mesh(
         new THREE.SphereGeometry(3,32,32),
@@ -112,8 +118,8 @@ function createSaturn(){
         })
     )
 
-    const saturnRingTexture = new THREE.TextureLoader().load('Textures/Saturn Rings.png');
-    const saturnRingTransparency = new THREE.TextureLoader().load('Textures/Saturn Ring Transparency.jpg');
+    const saturnRingTexture = new THREE.TextureLoader().load('Assets/Saturn Rings.png');
+    const saturnRingTransparency = new THREE.TextureLoader().load('Assets/Saturn Ring Transparency.jpg');
 
     const geometry = new THREE.RingGeometry(5, 10, 32);
     const material = new THREE.ShaderMaterial({
