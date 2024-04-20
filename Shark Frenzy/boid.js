@@ -9,13 +9,15 @@ class boid{
         this.acceleration = createVector();
     }
 
-    destroy(flock){
+    destroy(flock, effects){
+        if (shark.alive == true){
         let index = flock.indexOf(this);
         shark.score += 3;
         shark.hunger += 0.05;
         shark.hunger = min(shark.hunger, 1);
-        effects.push(new deathEffect(this.position));
+        effects.push(new deathEffect(this.position, 50));
         flock.splice(index, 1);
+        }
     }
 
     alignment(flock){
@@ -92,22 +94,35 @@ class boid{
         }
         return force;
     }
+
+    avoidOrca(orca){
+        let force = createVector();
+        let distance = dist(this.position.x, this.position.y, orca.position.x, orca.position.y);
+        if (distance <=200){
+            force = p5.Vector.sub(this.position, orca.position);
+            if (distance > 0){
+            force.div(distance);
+            }
+        }
+        return force;
+    }
     
-    sharkCollision(flock, shark){
+    sharkCollision(flock, shark, effects){
         let distance = dist(this.position.x, this.position.y, shark.position.x, shark.position.y);
-        if (distance < 15 * (1 + shark.score/80) ){
-           this.destroy(flock);
+        if (distance < 20 * (1 + shark.score/70) ){
+           this.destroy(flock, effects);
         }
     }
 
-    update(flock, shark){
-        this.sharkCollision(flock, shark);
+    update(flock, shark, orca, effects){
+        this.sharkCollision(flock, shark, effects);
 
         this.acceleration.mult(0);
         this.acceleration.add(this.cohesion(flock));
         this.acceleration.add(this.separation(flock));
         this.acceleration.add(this.alignment(flock));
         this.acceleration.add(this.avoidShark(shark));
+        this.acceleration.add(this.avoidOrca(orca));
         this.acceleration.mult(0.8);
 
         this.velocity.add(this.acceleration);

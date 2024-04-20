@@ -1,8 +1,8 @@
 class deathEffect{
-    constructor(position){
+    constructor(position, radius){
         this.position= position;
         this.percentLifeLived = 0;
-        this.maxRadius = 50;
+        this.maxRadius = radius;
     }
 
     update(effects){

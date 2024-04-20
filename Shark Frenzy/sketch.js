@@ -1,5 +1,6 @@
 let flock = [];
 let shark;
+let orca;
 let effects = [];
 
 function setup() {
@@ -13,6 +14,7 @@ function setup() {
   }
   console.log(width * height / 8000);
   shark = new player;
+  orca = new predator;
 }
 
 function draw() {
@@ -21,13 +23,15 @@ function draw() {
     effect.update(effects);
   }
   for (let thisBoid of flock){
-    thisBoid.update(flock, shark, effects);
+    thisBoid.update(flock, shark, orca, effects);
   }
   for (let thisBoid of flock){
     thisBoid.show();
   }
-  shark.update();
+  shark.update(orca, effects);
   shark.show();
+  orca.update(shark);
+  orca.show(shark);
   drawUI(shark.hunger);
   
 }
