@@ -11,7 +11,7 @@ function setup() {
   const height = window.innerHeight|| document.documentElement.clientHeight|| document.body.clientHeight;
   createCanvas(width, height);
 
-  for (i=0; i < width * height / 8000; i++){
+  for (i=0; i < width * height / 10000; i++){
   flock.push(new boid(i));
   }
   shark = new player;
