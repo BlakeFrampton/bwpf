@@ -1,6 +1,6 @@
 class predator{
   maxSpeed = 30;
-  maxAcceleration = 0.04;
+  maxAcceleration = 0.2;
   ColourMultiplier = 1;
   shrinkMult = 1;
 

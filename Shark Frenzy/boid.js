@@ -3,17 +3,17 @@ let MaxForce = 0.5;
 
 class boid{
     constructor(){
-        this.position= createVector(random(width), random(height));
+        this.position= createVector(random(-width/2, width/2   ), random(-height/2, height/2));
         this.velocity = createVector();
         this.velocity = p5.Vector.random2D(); 
         this.acceleration = createVector();
     }
 
-    destroy(flock, effects){
+    destroy(flock, effects, zoom){
         if (shark.alive == true){
         let index = flock.indexOf(this);
         shark.score += 3;
-        shark.hunger += 0.05;
+        shark.hunger += 0.05 / zoom;
         shark.hunger = min(shark.hunger, 1);
         effects.push(new deathEffect(this.position, 50));
         flock.splice(index, 1);
@@ -107,15 +107,15 @@ class boid{
         return force;
     }
     
-    sharkCollision(flock, shark, effects){
+    sharkCollision(flock, shark, effects, zoom){
         let distance = dist(this.position.x, this.position.y, shark.position.x, shark.position.y);
         if (distance < 20 * (1 + shark.score/70) ){
-           this.destroy(flock, effects);
+           this.destroy(flock, effects, zoom);
         }
     }
 
-    update(flock, shark, orca, effects){
-        this.sharkCollision(flock, shark, effects);
+    update(flock, shark, orca, effects, zoom){
+        this.sharkCollision(flock, shark, effects, zoom);
 
         this.acceleration.mult(0);
         this.acceleration.add(this.cohesion(flock));
@@ -130,11 +130,11 @@ class boid{
         this.position.add(this.velocity);
     }
 
-    show() {
+    show(zoom) {
         strokeWeight(15);
         stroke(250);
         fill(250);
-        this.LoopEdges();
+        this.LoopEdges(zoom);
         push();
         translate(this.position.x, this.position.y);
         
@@ -152,16 +152,16 @@ class boid{
         pop();
     }
 
-    LoopEdges(){
-        if (this.position.x > width) {
-            this.position.x = 0;
-          } else if (this.position.x < 0) {
-            this.position.x = width;
+    LoopEdges(zoom){
+        if (this.position.x > width/2 * zoom   ) {
+            this.position.x = -width/2 * zoom;
+          } else if (this.position.x < -width/2 * zoom) {
+            this.position.x = width/2* zoom;
           }
-          if (this.position.y > height) {
-            this.position.y = 0;
-          } else if (this.position.y < 0) {
-            this.position.y = height;
+          if (this.position.y > height/2* zoom) {
+            this.position.y = -height/2 * zoom;
+          } else if (this.position.y < -height/2* zoom) {
+            this.position.y = height/2* zoom;
           }
     }
 }

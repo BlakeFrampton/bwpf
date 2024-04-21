@@ -17,6 +17,7 @@ class deathEffect{
             let index = effects.indexOf(this);
             effects.splice(index, 1);
         }
+        pop();
     }
 
 }
