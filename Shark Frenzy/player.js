@@ -7,7 +7,7 @@ class player{
       this.position= createVector(0 , 0);
       this.velocity = createVector();
       this.acceleration = createVector();
-      this.score = 300;
+      this.score = 0;
       this.hunger = 1;
       this.alive = true;
       this.eaten = false;
