@@ -11,5 +11,6 @@ class gameController{
     orcaEaten(){
         this.orcasEaten += 1;
         this.targetZoom = this.initialZoom +this.orcasEaten;
+        
     }
 }
