@@ -4,18 +4,20 @@ let orca;
 let effects = [];
 let zoom = 1;
 let targetZoom = 1;
+let fishToSpawn = 160;
 
 function setup() {
   angleMode(RADIANS);
   const width  = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
   const height = window.innerHeight|| document.documentElement.clientHeight|| document.body.clientHeight;
   createCanvas(width, height);
-
-  for (i=0; i < width * height / 10000; i++){
-  flock.push(new boid(i));
-  }
   shark = new player;
   orca = new predator;
+  shark.fishSpawned += int(width * height / 14000);
+  for (i=0; i < shark.fishSpawned; i++){
+  flock.push(new boid(random(-width/2, width/2), random(-height/2, height/2)));
+  }
+
   translate(width/2, height/2);
 }
 
@@ -27,15 +29,14 @@ function draw() {
     effect.update(effects);
   }
   for (let thisBoid of flock){
-    thisBoid.update(flock, shark, orca, effects, zoom);
+    thisBoid.update(flock, shark, orca, effects, zoom, fishToSpawn);
   }
   for (let thisBoid of flock){
     thisBoid.show(zoom);
   }
-  targetZoom = shark.update(orca, effects, zoom, targetZoom);
+  targetZoom = shark.update(orca, effects, zoom, targetZoom, fishToSpawn);
   shark.show();
-  console.log(targetZoom);
-  orca.update(shark);
+  orca.update(shark, zoom);
   orca.show(shark);
   drawUI(shark.hunger, zoom);
   updateZoom();

@@ -1,15 +1,18 @@
 let perceptionRadius = 100;
 let MaxForce = 0.5;
+let maxVelocity = 4;
 
 class boid{
-    constructor(){
-        this.position= createVector(random(-width/2, width/2   ), random(-height/2, height/2));
-        this.velocity = createVector();
+    constructor(xPos, yPos){
+        this.position= createVector(xPos,yPos);
+        this.velocity = createVector(-xPos, -yPos);
+        if (this.velocity.mag == 0){
         this.velocity = p5.Vector.random2D(); 
+        }
         this.acceleration = createVector();
     }
 
-    destroy(flock, effects, zoom){
+    destroy(flock, effects, zoom, fishToSpawn, shark){
         if (shark.alive == true){
         let index = flock.indexOf(this);
         shark.score += 3;
@@ -17,7 +20,31 @@ class boid{
         shark.hunger = min(shark.hunger, 1);
         effects.push(new deathEffect(this.position, 50));
         flock.splice(index, 1);
+        console.log(shark.fishSpawned, fishToSpawn);
+        if (shark.fishSpawned < fishToSpawn){
+        this.spawnFish(flock, shark, zoom);
         }
+        }
+    }
+
+    spawnFish(flock, shark, zoom){
+        shark.fishSpawned += 1;
+        let x;
+        let y;
+        if (random(1)> 0.5){
+            x = -width/2
+            if (random(1)>0.5){
+                x = abs(x);
+            }
+            y = random(-height/2, height/2);
+        }else{
+            y = -height/2
+            if (random(1)>0.5){
+                y = abs(y);
+            }
+            x = random(-width/2, width/2);
+        }
+        flock.push(new boid(x * zoom,y * zoom));
     }
 
     alignment(flock){
@@ -75,6 +102,17 @@ class boid{
         return force;
     }
 
+    wiggle(shark){
+        let force = createVector(0,0);
+        let distance = dist(this.position.x, this.position.y, shark.position.x, shark.position.y);
+        if (distance <= (perceptionRadius + 30) * 2* (1 + shark.score / 250)){
+        force.x = random(-1, 1);
+        force.y = random(-1, 1);
+        force.mult(0.5);
+        }
+        return force;
+    }
+
     includeBoid(other, perceptionDist){
         let distance = dist(this.position.x, this.position.y, other.position.x, other.position.y)
         if (this !== other && distance <= perceptionDist){
@@ -107,15 +145,15 @@ class boid{
         return force;
     }
     
-    sharkCollision(flock, shark, effects, zoom){
+    sharkCollision(flock, shark, effects, zoom, fishToSpawn){
         let distance = dist(this.position.x, this.position.y, shark.position.x, shark.position.y);
         if (distance < 20 * (1 + shark.score/70) ){
-           this.destroy(flock, effects, zoom);
+         this.destroy(flock, effects, zoom, fishToSpawn, shark);
         }
     }
 
-    update(flock, shark, orca, effects, zoom){
-        this.sharkCollision(flock, shark, effects, zoom);
+    update(flock, shark, orca, effects, zoom, fishToSpawn){
+        this.sharkCollision(flock, shark, effects, zoom, fishToSpawn);
 
         this.acceleration.mult(0);
         this.acceleration.add(this.cohesion(flock));
@@ -123,10 +161,11 @@ class boid{
         this.acceleration.add(this.alignment(flock));
         this.acceleration.add(this.avoidShark(shark));
         this.acceleration.add(this.avoidOrca(orca));
+        this.acceleration.add(this.wiggle(shark));
         this.acceleration.mult(0.8);
 
         this.velocity.add(this.acceleration);
-        this.velocity.setMag(4);
+        this.velocity.setMag(maxVelocity);
         this.position.add(this.velocity);
     }
 

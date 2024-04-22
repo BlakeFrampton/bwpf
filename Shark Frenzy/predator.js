@@ -1,17 +1,17 @@
 class predator{
   maxSpeed = 30;
-  maxAcceleration = 0.12;
+  maxAcceleration = 0.09;
   ColourMultiplier = 1;
   shrinkMult = 1;
 
     constructor(){
-      this.position= createVector(width , height);
+      this.position= createVector(width/2 , height/2);
       this.velocity = createVector();
       this.acceleration = createVector();
       this.alive =true;
     }
 
-    update(shark){
+    update(shark, zoom){
       if (shark.alive && this.alive){
         this.acceleration.x = shark.position.x;
         this.acceleration.y = shark.position.y;
@@ -22,8 +22,12 @@ class predator{
        
         }
       }
+      if (abs(this.position.x) > width*zoom || abs(this.position.y) > height * zoom){
+        this.velocity.setMag(0);
+      }
       this.velocity.add(this.acceleration);
-      this.velocity.limit(30);
+      this.velocity.limit(this.maxSpeed);
+      //if orca is double distance form center to edge, take its momentum - this helps aim
       this.position.add(this.velocity);
     }
 

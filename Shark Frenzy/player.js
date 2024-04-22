@@ -7,10 +7,11 @@ class player{
       this.position= createVector(0 , 0);
       this.velocity = createVector();
       this.acceleration = createVector();
-      this.score = 0;
+      this.score = 300;
       this.hunger = 1;
       this.alive = true;
       this.eaten = false;
+      this.fishSpawned = 0;
     }
 
     update(orca, effects, zoom, targetZoom){
@@ -63,6 +64,7 @@ class player{
         this.score += 30;
         this.hunger = 1;
         targetZoom += 1;
+        this.fishSpawned = 0;
       }
       return targetZoom;
     }
