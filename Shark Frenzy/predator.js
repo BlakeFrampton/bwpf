@@ -11,7 +11,7 @@ class predator{
       this.alive =true;
     }
 
-    update(shark, zoom){
+    update(shark, controller){
       if (shark.alive && this.alive){
         this.acceleration.x = shark.position.x;
         this.acceleration.y = shark.position.y;
@@ -22,7 +22,7 @@ class predator{
        
         }
       }
-      if (abs(this.position.x) > width*zoom || abs(this.position.y) > height * zoom){
+      if (abs(this.position.x) > width*controller.zoom || abs(this.position.y) > height * controller.zoom){
         this.velocity.setMag(0);
       }
       this.velocity.add(this.acceleration);

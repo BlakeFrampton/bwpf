@@ -2,20 +2,25 @@ let flock = [];
 let shark;
 let orca;
 let effects = [];
-let zoom = 1;
-let targetZoom = 1;
+let controller;
 let fishToSpawn = 160;
 
 function setup() {
+  frameRate(60);
   angleMode(RADIANS);
   const width  = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
   const height = window.innerHeight|| document.documentElement.clientHeight|| document.body.clientHeight;
   createCanvas(width, height);
+  let zoom =1;
+  if (width < 800){
+    zoom = 2;
+  }
+  controller = new gameController(zoom);
   shark = new player;
   orca = new predator;
-  shark.fishSpawned += int(width * height / 14000);
-  for (i=0; i < shark.fishSpawned; i++){
-  flock.push(new boid(random(-width/2, width/2), random(-height/2, height/2)));
+  controller.fishSpawned += int(width * height / 14000 * controller.zoom);
+  for (i=0; i < controller.fishSpawned; i++){
+  flock.push(new boid(random(-width/2 * controller.zoom, width/2 * controller.zoom), random(-height/2 * controller.zoom, height/2 * controller.zoom)));
   }
 
   translate(width/2, height/2);
@@ -23,35 +28,36 @@ function setup() {
 
 function draw() {
   translate(width/2,height/2);
-  background(44, 160, 224);
-  scale(1/zoom);
+  background(max(0, 47 - controller.zoom * 3), max(0, 165 - controller.zoom * 5), 224);
+  scale(1/controller.zoom);
   for (let effect of effects){
     effect.update(effects);
   }
   for (let thisBoid of flock){
-    thisBoid.update(flock, shark, orca, effects, zoom, fishToSpawn);
+    thisBoid.update(flock, shark, orca, effects, controller);
   }
   for (let thisBoid of flock){
-    thisBoid.show(zoom);
+    thisBoid.show(controller);
   }
-  targetZoom = shark.update(orca, effects, zoom, targetZoom, fishToSpawn);
-  shark.show();
-  orca.update(shark, zoom);
+  shark.update(orca, effects, controller);
+  shark.show(controller);
+  orca.update(shark, controller);
   orca.show(shark);
-  drawUI(shark.hunger, zoom);
+  drawUI(shark.hunger);
   updateZoom();
 }
 
-function drawUI(hunger, zoom){
+function drawUI(hunger){
   //Draw score
   // translate(width/2, height/2);
+  let zoom = controller.zoom;
   push();
   noFill();
   stroke(90, 90, 255);
   strokeWeight(3 * zoom);
   textSize(100 * zoom);
   textAlign(CENTER);
-  text(shark.score * 5/3,0, (-height /2 + 90) *  zoom);
+  text(controller.score * 5/3,0, (-height /2 + 90) *  zoom);
   pop();
   //Draw hunger bar
 
@@ -65,9 +71,10 @@ function drawUI(hunger, zoom){
 }
 
 function updateZoom(){
-  if (targetZoom > zoom){
-    zoom += 0.01;
-  }else if (zoom > targetZoom){
-    zoom = targetZoom;
+  console.log(controller.targetZoom,controller.zoom);
+  if (controller.targetZoom > controller.zoom){
+    controller.zoom += 0.01;
+  }else if (controller.zoom > controller.targetZoom){
+    controller.zoom = controller.targetZoom;
   }
 }

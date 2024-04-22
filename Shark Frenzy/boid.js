@@ -12,23 +12,22 @@ class boid{
         this.acceleration = createVector();
     }
 
-    destroy(flock, effects, zoom, fishToSpawn, shark){
+    destroy(flock, effects, controller, shark){
         if (shark.alive == true){
         let index = flock.indexOf(this);
-        shark.score += 3;
-        shark.hunger += 0.05 / zoom;
+        controller.score += 3;
+        shark.hunger += 0.05 / (controller.orcasEaten + 1);
         shark.hunger = min(shark.hunger, 1);
         effects.push(new deathEffect(this.position, 50));
         flock.splice(index, 1);
-        console.log(shark.fishSpawned, fishToSpawn);
-        if (shark.fishSpawned < fishToSpawn){
-        this.spawnFish(flock, shark, zoom);
+        if (controller.fishSpawned < controller.fishToSpawn){
+        this.spawnFish(flock, shark);
         }
         }
     }
 
-    spawnFish(flock, shark, zoom){
-        shark.fishSpawned += 1;
+    spawnFish(flock, shark){
+        controller.fishSpawned += 1;
         let x;
         let y;
         if (random(1)> 0.5){
@@ -121,10 +120,10 @@ class boid{
         return false;
     }
 
-    avoidShark(shark){
+    avoidShark(shark, controller){
         let force = createVector();
         let distance = dist(this.position.x, this.position.y, shark.position.x, shark.position.y);
-        if (distance <= perceptionRadius * 2* (1 + shark.score / 250)){
+        if (distance <= perceptionRadius * 2* (1 + controller.score / 250)){
             force = p5.Vector.sub(this.position, shark.position);
             if (distance > 0){
             force.div(distance);
@@ -145,21 +144,21 @@ class boid{
         return force;
     }
     
-    sharkCollision(flock, shark, effects, zoom, fishToSpawn){
+    sharkCollision(flock, shark, effects, controller){
         let distance = dist(this.position.x, this.position.y, shark.position.x, shark.position.y);
-        if (distance < 20 * (1 + shark.score/70) ){
-         this.destroy(flock, effects, zoom, fishToSpawn, shark);
+        if (distance < 20 * (1 + controller.score/70) ){
+         this.destroy(flock, effects,controller, shark);
         }
     }
 
-    update(flock, shark, orca, effects, zoom, fishToSpawn){
-        this.sharkCollision(flock, shark, effects, zoom, fishToSpawn);
+    update(flock, shark, orca, effects, controller){
+        this.sharkCollision(flock, shark, effects, controller);
 
         this.acceleration.mult(0);
         this.acceleration.add(this.cohesion(flock));
         this.acceleration.add(this.separation(flock));
         this.acceleration.add(this.alignment(flock));
-        this.acceleration.add(this.avoidShark(shark));
+        this.acceleration.add(this.avoidShark(shark,controller));
         this.acceleration.add(this.avoidOrca(orca));
         this.acceleration.add(this.wiggle(shark));
         this.acceleration.mult(0.8);
@@ -169,11 +168,11 @@ class boid{
         this.position.add(this.velocity);
     }
 
-    show(zoom) {
+    show(controller) {
         strokeWeight(15);
         stroke(250);
         fill(250);
-        this.LoopEdges(zoom);
+        this.LoopEdges(controller.zoom);
         push();
         translate(this.position.x, this.position.y);
         

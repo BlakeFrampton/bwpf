@@ -7,24 +7,22 @@ class player{
       this.position= createVector(0 , 0);
       this.velocity = createVector();
       this.acceleration = createVector();
-      this.score = 0;
       this.hunger = 1;
       this.alive = true;
       this.eaten = false;
-      this.fishSpawned = 0;
     }
 
-    update(orca, effects, zoom, targetZoom){
+    update(orca, effects, controller){
       if (this.hunger == 0){
         this.starve();
       } 
       if (this.alive){
-        targetZoom = this.checkPredatorCollision(orca, effects, targetZoom);
+       this.checkPredatorCollision(orca, effects, controller);
 
         this.hunger -= 0.0006;
         this.hunger = max(0,this.hunger);
 
-        let mousePosition = createVector((mouseX - width/2) * zoom, (mouseY - height/2) * zoom);
+        let mousePosition = createVector((mouseX - width/2) * controller.zoom, (mouseY - height/2) * controller.zoom);
         this.acceleration = mousePosition.sub(this.position);
         if (this.acceleration.mag() > 3){
         this.acceleration.limit(5 / (1 + this.score/200));
@@ -36,7 +34,6 @@ class player{
       this.velocity.limit(this.maxSpeed);
       this.position.add(this.velocity);
       }
-      return targetZoom;
     }
 
     starve(){
@@ -48,8 +45,8 @@ class player{
       }
     }
 
-    checkPredatorCollision(orca, effects, targetZoom){
-      let sizeMult = 1 + this.score/150;
+    checkPredatorCollision(orca, effects, controller){
+      let sizeMult = 1 + controller.score/150;
       let distance = dist(this.position.x, this.position.y, orca.position.x, orca.position.y);
       if (distance < 75 * sizeMult && sizeMult < 2.8){
         let position = createVector(this.position.x, this.position.y);
@@ -61,15 +58,14 @@ class player{
         orca.alive = false;
         let position = createVector(orca.position.x, orca.position.y);
         effects.push(new deathEffect(position, 600));
-        this.score += 30;
+        controller.score += 30;
         this.hunger = 1;
-        targetZoom += 1;
-        this.fishSpawned = 0;
+        controller.fishSpawned = 0;
+        controller.orcaEaten();
       }
-      return targetZoom;
     }
 
-    show() {
+    show(controller) {
       if (this.eaten && this.shrinkMult > 0){
         this.shrinkMult -= 0.04;
         if (this.shrinkMult < 0){
@@ -89,7 +85,7 @@ class player{
         }
         stroke(100 * this.ColourMultiplier);
         fill(100* this.ColourMultiplier);
-        let sizeMult = 1 + this.score/150
+        let sizeMult = 1 + controller.score/150
         stroke(160* this.ColourMultiplier);
         strokeWeight(15 *sizeMult);
         ellipse(-30,0, 80 * sizeMult, 24 * sizeMult); //body
