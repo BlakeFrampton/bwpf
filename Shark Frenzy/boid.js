@@ -1,7 +1,3 @@
-let perceptionRadius = 100;
-let MaxForce = 0.5;
-let maxVelocity = 4;
-
 class boid{
     constructor(xPos, yPos){
         this.position= createVector(xPos,yPos);
@@ -10,13 +6,40 @@ class boid{
         this.velocity = p5.Vector.random2D(); 
         }
         this.acceleration = createVector();
+
+        this.invincibilityFrames = 5;
+
+        this.colour = "blue";
+        this.points = 3;
+        this.maxVelocity =4;
+        this.hungerValue = 0.05;
+        this.perceptionRadius = 100;
+        this.maxForce = 0.5;
+        this.scale = 1;
+
+        let rndInt = int(random(1,75));
+        if (rndInt == 1){
+            this.colour = "gold";
+            this.points = 30;
+            this.maxVelocity = 5;
+            this.hungerValue = 0.05;
+        }else if (rndInt == 2){
+            this.colour = "green";
+            this.hungerValue = 0.2;
+            this.perceptionRadius = 200;
+        }else if (rndInt >= 65){
+            this.colour = "orange"
+            this.maxForce = 0.25;
+            this.scale = 2;
+            this.hungerValue = 0.1;
+        }
     }
 
     destroy(flock, effects, controller, shark){
         if (shark.alive == true){
         let index = flock.indexOf(this);
-        controller.score += 3;
-        shark.hunger += 0.05 / (controller.orcasEaten + 1);
+        controller.score += this.points;
+        shark.hunger += this.hungerValue / (controller.orcasEaten + 1);
         shark.hunger = min(shark.hunger, 1);
         effects.push(new deathEffect(this.position, 50));
         flock.splice(index, 1);
@@ -30,7 +53,7 @@ class boid{
         let force = createVector();
         let NumOfLocals = 0;
         for (let other of flock){
-            if (this.includeBoid(other, perceptionRadius)){
+            if (this.includeBoid(other, this.perceptionRadius)){
                 force.add(other.velocity);
                 NumOfLocals++;
             }
@@ -38,7 +61,7 @@ class boid{
         if (NumOfLocals > 0){
         force.div(NumOfLocals);
         }
-        force.limit(MaxForce);
+        force.limit(this.maxForce);
         return force;
     }
 
@@ -46,7 +69,7 @@ class boid{
         let force = createVector();
         let NumOfLocals = 0;
         for (let other of flock){
-            if (this.includeBoid(other,perceptionRadius)){
+            if (this.includeBoid(other,this.perceptionRadius)){
                 force.add(other.position);
                 NumOfLocals++;
             }
@@ -55,7 +78,7 @@ class boid{
             force.div(NumOfLocals);
         }
         force.sub(this.position);
-        force.limit(MaxForce);
+        force.limit(this.maxForce);
         return force;
     }
 
@@ -64,7 +87,7 @@ class boid{
         let NumOfLocals = 0;
         let currentForce = createVector();
         for (let other of flock){
-            if (this.includeBoid(other, perceptionRadius)){
+            if (this.includeBoid(other, this.perceptionRadius)){
                 currentForce = p5.Vector.sub(this.position, other.position);
                 let distance = dist(this.position.x, this.position.y, other.position.x, other.position.y)
                 if (distance > 0){
@@ -76,15 +99,15 @@ class boid{
             force.div(NumOfLocals);
         }
         }
-        force.limit(MaxForce);
-        force.mult(2);
+        force.limit(this.maxForce);
+        force.mult(4);
         return force;
     }
 
     wiggle(shark){
         let force = createVector(0,0);
         let distance = dist(this.position.x, this.position.y, shark.position.x, shark.position.y);
-        if (distance <= (perceptionRadius + 30) * 2* (1 + shark.score / 250)){
+        if (distance <= (this.perceptionRadius + 30) * 2* (1 + shark.score / 250)){
         force.x = random(-1, 1);
         force.y = random(-1, 1);
         force.mult(0.5);
@@ -103,7 +126,7 @@ class boid{
     avoidShark(shark, controller){
         let force = createVector();
         let distance = dist(this.position.x, this.position.y, shark.position.x, shark.position.y);
-        if (distance <= perceptionRadius * 2* (1 + controller.score / 250)){
+        if (distance <= this.perceptionRadius * 2* (1 + controller.score / 250)){
             force = p5.Vector.sub(this.position, shark.position);
             if (distance > 0){
             force.div(distance);
@@ -126,12 +149,13 @@ class boid{
     
     sharkCollision(flock, shark, effects, controller){
         let distance = dist(this.position.x, this.position.y, shark.position.x, shark.position.y);
-        if (distance < 20 * (1 + controller.score/70) ){
+        if (distance < 20 * (1 + controller.score/70) && this.invincibilityFrames == 0 ){
          this.destroy(flock, effects,controller, shark);
         }
     }
 
     update(flock, shark, effects, controller){
+        this.invincibilityFrames = max(0, this.invincibilityFrames-1);
         this.sharkCollision(flock, shark, effects, controller);
 
         this.acceleration.mult(0);
@@ -144,7 +168,7 @@ class boid{
         this.acceleration.mult(0.8);
 
         this.velocity.add(this.acceleration);
-        this.velocity.setMag(maxVelocity);
+        this.velocity.setMag(this.maxVelocity);
         this.position.add(this.velocity);
     }
 
@@ -160,26 +184,41 @@ class boid{
         if (this.velocity.x < 0){
            rotate(PI);
         }
-        stroke(50, 70, 200, 230);
-        fill(50, 70, 200, 200)
-        triangle(-13,0.5, -13,-0.5,-11.5,0);
-        ellipse(6,0,15,3);
-        strokeWeight(3);
+        if (this.colour == "blue"){
+            stroke(50, 70, 200);
+        } else if(this.colour == "gold"){
+            stroke(200,180, 53)
+        } else if(this.colour == "green"){
+            stroke(39, 189, 80);
+        } else if(this.colour == "orange"){
+            stroke(255, 158, 11);
+        }
+        triangle(-13 ,0.5* this.scale, -13,-0.5* this.scale,-11.5 ,0);
+        ellipse(6* this.scale,0,15* this.scale,3* this.scale);
+        strokeWeight(2.5 + 0.5 * this.scale);
         stroke(40);
-        point(12,-4);
+        point(12* this.scale,-4);
         pop();
     }
 
     LoopEdges(zoom){
+        let looped = false;
         if (this.position.x > width/2 * zoom   ) {
             this.position.x = -width/2 * zoom;
+            looped = true;
           } else if (this.position.x < -width/2 * zoom) {
             this.position.x = width/2* zoom;
+            looped = true;
           }
           if (this.position.y > height/2* zoom) {
             this.position.y = -height/2 * zoom;
+            looped = true;
           } else if (this.position.y < -height/2* zoom) {
             this.position.y = height/2* zoom;
+            looped = true;
+          }
+          if (looped){
+            this.invincibilityFrames = 10;
           }
     }
 }
