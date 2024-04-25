@@ -1,7 +1,7 @@
 class gameController{
 
     constructor(zoom){
-        this.score = 330;
+        this.score = 0;
         this.fishSpawned = 0;
         this.fishToSpawn = 180;
         this.maxFish;
