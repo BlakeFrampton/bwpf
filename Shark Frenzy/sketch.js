@@ -79,10 +79,6 @@ function drawUI(shark){
   pop();
 }
 
-function restart(){
-  location.reload();
-}
-
 function pause(){
   if (paused == true){
     paused = false;
