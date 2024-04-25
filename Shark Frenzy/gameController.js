@@ -11,7 +11,7 @@ class gameController{
         this.zoom = this.initialZoom * pow(2, this.orcasEaten);
         this.orca = new predator(this.orcasEaten, this.zoom);
         this.restartButton = createButton("Restart");
-        this.restartButton.mouseClicked(restart);
+        this.restartButton.mouseClicked(this.restart);
         this.restartButton.position(-50,-50);
         this.restartButton.class("button restart");
     }
@@ -45,8 +45,7 @@ class gameController{
             this.spawnFish(flock);
         }
     }
-}
-
-function restart(){
-    location.reload();
+    restart(){
+        location.reload();
+    }
 }
