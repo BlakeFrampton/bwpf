@@ -4,11 +4,12 @@ class predator{
   ColourMultiplier = 1;
   shrinkMult = 1;
 
-    constructor(){
-      this.position= createVector(width/2 , height/2);
+    constructor(orcasEaten, zoom){
+      this.position= createVector(width/2 * zoom + 50 * zoom, height/2 * zoom + 50 * zoom);
       this.velocity = createVector();
       this.acceleration = createVector();
       this.alive =true;
+      this.sizeMult = 3 * (1 + orcasEaten);
     }
 
     update(shark, controller){
@@ -18,7 +19,8 @@ class predator{
         this.acceleration =this.acceleration.sub(this.position);
 
         if (this.acceleration.mag() > 3){
-        this.acceleration.limit(this.maxAcceleration);
+        // this.acceleration.limit(this.maxAcceleration / (1+controller.orcasEaten));
+        this.acceleration.limit(this.maxAcceleration / (1+controller.orcasEaten));
        
         }
       }
@@ -26,7 +28,7 @@ class predator{
         this.velocity.setMag(0);
       }
       this.velocity.add(this.acceleration);
-      this.velocity.limit(this.maxSpeed);
+      this.velocity.limit(this.maxSpeed/(1+controller.orcasEaten));
       //if orca is double distance form center to edge, take its momentum - this helps aim
       this.position.add(this.velocity);
     }
@@ -50,7 +52,7 @@ class predator{
            rotate(PI);
         }
         fill(255);
-        let sizeMult = 3;
+        let sizeMult = this.sizeMult;
         stroke(30);
         strokeWeight(15 *sizeMult);
         ellipse(-30,0, 80 * sizeMult, 24 * sizeMult); //body
@@ -62,8 +64,9 @@ class predator{
         triangle(-30 - 35 * sizeMult, 0, -30 - 55 * sizeMult, 0,  -30 - 65 * sizeMult, 25* sizeMult); //tail
         triangle(-30 - 35 * sizeMult, 0,  -30 - 55 * sizeMult, 0, -30 - 65 * sizeMult, -25* sizeMult); //tail
 
-        triangle(-35, 18 * sizeMult, -15 ,16 * sizeMult, -35, 35 * sizeMult); //fin
-        triangle(-35, -18 * sizeMult, -15 ,-16 * sizeMult, -35, -35 * sizeMult); //fin
+        triangle(-35 * sizeMult/3, 16 * sizeMult, 0  ,16 * sizeMult, -35 * sizeMult/3, 35 * sizeMult); //fin
+        triangle(-35 * sizeMult/3, -16 * sizeMult, 0 ,-16 * sizeMult, -35 * sizeMult/3, -35 * sizeMult); //fin
+
         pop();
     }
   }

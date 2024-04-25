@@ -21,29 +21,9 @@ class boid{
         effects.push(new deathEffect(this.position, 50));
         flock.splice(index, 1);
         if (controller.fishSpawned < controller.fishToSpawn){
-        this.spawnFish(flock, shark);
+        controller.spawnFish(flock);
         }
         }
-    }
-
-    spawnFish(flock, shark){
-        controller.fishSpawned += 1;
-        let x;
-        let y;
-        if (random(1)> 0.5){
-            x = -width/2
-            if (random(1)>0.5){
-                x = abs(x);
-            }
-            y = random(-height/2, height/2);
-        }else{
-            y = -height/2
-            if (random(1)>0.5){
-                y = abs(y);
-            }
-            x = random(-width/2, width/2);
-        }
-        flock.push(new boid(x * zoom,y * zoom));
     }
 
     alignment(flock){
@@ -151,7 +131,7 @@ class boid{
         }
     }
 
-    update(flock, shark, orca, effects, controller){
+    update(flock, shark, effects, controller){
         this.sharkCollision(flock, shark, effects, controller);
 
         this.acceleration.mult(0);
@@ -159,7 +139,7 @@ class boid{
         this.acceleration.add(this.separation(flock));
         this.acceleration.add(this.alignment(flock));
         this.acceleration.add(this.avoidShark(shark,controller));
-        this.acceleration.add(this.avoidOrca(orca));
+        this.acceleration.add(this.avoidOrca(controller.orca));
         this.acceleration.add(this.wiggle(shark));
         this.acceleration.mult(0.8);
 
