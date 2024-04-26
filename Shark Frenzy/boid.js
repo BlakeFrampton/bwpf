@@ -1,5 +1,5 @@
 class boid{
-    constructor(xPos, yPos){
+    constructor(xPos, yPos, iFrames){
         this.position= createVector(xPos,yPos);
         this.velocity = createVector(-xPos, -yPos);
         if (this.velocity.mag == 0){
@@ -7,7 +7,7 @@ class boid{
         }
         this.acceleration = createVector();
 
-        this.invincibilityFrames = 5;
+        this.invincibilityFrames = iFrames;
 
         this.colour = "blue";
         this.points = 3;

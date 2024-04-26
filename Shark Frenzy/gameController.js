@@ -33,7 +33,7 @@ class gameController{
             }
             x = random(-width/2, width/2);
         }
-        flock.push(new boid(x * this.targetZoom,y * this.targetZoom));
+        flock.push(new boid(x * this.targetZoom,y * this.targetZoom, 5));
     }
 
     orcaEaten(flock){
