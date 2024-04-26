@@ -51,7 +51,7 @@ class player{
     checkPredatorCollision(effects, controller,flock){
       let sizeMult = 1 + controller.score/150;
       let distance = dist(this.position.x, this.position.y, controller.orca.position.x,  controller.orca.position.y);
-      if (distance < 120* (1 + controller.orcasEaten) && sizeMult < 2.8 * (1+controller.orcasEaten) &&controller.orca.alive){
+      if (distance < 72* (1 + controller.orcasEaten) && sizeMult < 2.8 * (1+controller.orcasEaten) &&controller.orca.alive){
         let position = createVector(this.position.x, this.position.y);
         effects.push(new deathEffect(position, 200 * sizeMult));
         this.alive = false;
