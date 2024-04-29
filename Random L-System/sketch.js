@@ -25,13 +25,7 @@ function setup() {
   frameRate(5);
   fill(255);
 
-  systemSelect = createSelect();
-  systemSelect.position(5, 10);
-  systemSelect.option("Plant");
-  systemSelect.option("Leaf");
-  systemSelect.option("Bush");
-
-  totalIterationsSlider = createSlider(0, 30, 6, 1);
+  totalIterationsSlider = createSlider(1, 10, 6, 1);
   totalIterationsSlider.position(width -140, 30);
 
   lineLengthSlider = createSlider(1, 20, 5, 0,0.5);
@@ -45,10 +39,6 @@ function setup() {
 
   angleSlider = createSlider(1, 90, 30, 1);
   angleSlider.position(width-140, 270);
-
-  systemSelect.changed(() => {
-    totalIterationsSlider.value(5);
-  })
 
   totalIterations = totalIterationsSlider.value();
   generateShape();
@@ -199,23 +189,11 @@ function chooseOne(options){
 }
 
 function setInitialAxiom(){
-  switch(systemSelect.selected()){
-    case "Plant":
-      return "X";
-    case "Leaf":
-      return "a";
-    case "Bush":
-      return "Y";
-  }
+  return "X";
 }
 
 function capIterations(){
-  switch(systemSelect.selected()){
-    case "Bush":
-      return min(totalIterations, 8);
-    default:
-      return totalIterations;
-  }
+ return totalIterations;
 }
 
 function plant(char){
