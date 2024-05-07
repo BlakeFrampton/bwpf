@@ -19,19 +19,29 @@ class boid{
 
         let rndInt = int(random(1,75));
         if (rndInt == 1){
+            //setup fast, high point Golden fish
             this.colour = "gold";
             this.points = 30;
             this.maxVelocity = 5;
             this.hungerValue = 0.05;
         }else if (rndInt == 2){
+            //setup high perception radius, high hunger green fish
             this.colour = "green";
             this.hungerValue = 0.2;
             this.perceptionRadius = 200;
         }else if (rndInt >= 65){
+            //set up large, extra hunger orange fish
             this.colour = "orange"
             this.maxForce = 0.25;
             this.scale = 2;
             this.hungerValue = 0.1;
+        }else if (rndInt == 3){
+            //new fish idea: purple, fast, low perception radius, small, 
+            this.colour = "purple";
+            this.maxVelocity = 6;
+            this.perceptionRadius = 50;
+            this.scale = 0.5;
+            this.points = 15;
         }
     }
 
@@ -184,21 +194,36 @@ class boid{
         if (this.velocity.x < 0){
            rotate(PI);
         }
+        //set stroke and fill colour of fish
         if (this.colour == "blue"){
             stroke(50, 70, 200);
+            fill(50, 70, 200);
         } else if(this.colour == "gold"){
             stroke(200,180, 53)
+            fill(200,180, 53);
         } else if(this.colour == "green"){
             stroke(39, 189, 80);
+            fill(39, 189, 80);
         } else if(this.colour == "orange"){
             stroke(255, 158, 11);
+            fill(255, 158, 11);
+        }else if(this.colour == "purple"){
+            stroke(150, 0, 150);
+            fill(150, 0, 150);
         }
-        triangle(-13 ,0.5* this.scale, -13,-0.5* this.scale,-11.5 ,0);
-        ellipse(6* this.scale,0,15* this.scale,3* this.scale);
-        strokeWeight(2.5 + 0.5 * this.scale);
-        stroke(40);
-        point(12* this.scale,-4);
-        pop();
+      //draw fish body
+    ellipse(0,0, 25 * this.scale, 10 * this.scale); // Increased width from 20 to 25
+    //draw fish tail
+    beginShape();
+    vertex(-15 * this.scale, 0); // Adjusted vertex coordinate from -10 to -15
+    vertex(-25 * this.scale, 5 * this.scale); // Adjusted vertex coordinate from -20 to -25
+    vertex(-25 * this.scale, -5 * this.scale); // Adjusted vertex coordinate from -20 to -25
+    endShape(CLOSE);
+    //draw fish eye
+    strokeWeight(5 + 0.5 * this.scale);
+    stroke(40);
+    point(12* this.scale,-4);
+    pop();
     }
 
     LoopEdges(zoom){

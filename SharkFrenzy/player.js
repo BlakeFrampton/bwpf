@@ -25,13 +25,15 @@ class player{
         let mousePosition = createVector((mouseX - width/2) * controller.zoom, (mouseY - height/2) * controller.zoom);
         this.acceleration = mousePosition.sub(this.position);
         if (this.acceleration.mag() > 3){
-        this.acceleration.limit(5);
-        this.acceleration.div(10);
-        }
+          this.acceleration.limit(5);
+          this.acceleration.div(10);
+          }
+       
       }
       if (this.alive || this.hunger == 0) {
       this.velocity.add(this.acceleration);
       this.velocity.limit(this.maxSpeed + 1 / max(controller.score, 1)); //max avoids dividing by 0
+      this.boost();
       this.position.add(this.velocity);
       }
     }
@@ -46,6 +48,16 @@ class player{
       }
 
       controller.restartButton.position(width/2 -60,height/2);
+    }
+
+    //spend hunger to go extra fast when space bar or mouse held
+    boost(){
+      if (keyIsDown(32) || mouseIsPressed){
+        console.log("boosting");
+        this.hunger -= 0.003;
+        this.velocity.mult(1.3);
+        this.hunger = max(0,this.hunger);
+      }
     }
 
     checkPredatorCollision(effects, controller,flock){
