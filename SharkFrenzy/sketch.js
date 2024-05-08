@@ -65,7 +65,7 @@ function drawUI(shark){
   strokeWeight(3 * zoom);
   textSize(100 * zoom);
   textAlign(CENTER);
-  text(controller.score * 5/3,0, (-height /2 + 90) *  zoom);
+  text((controller.score - 30) * 5/3,0, (-height /2 + 90) *  zoom);
   pop();
   //Draw hunger bar
   let hunger = shark.hunger

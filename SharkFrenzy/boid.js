@@ -211,18 +211,20 @@ class boid{
             stroke(150, 0, 150);
             fill(150, 0, 150);
         }
+
+        let scale = this.scale * 0.7;
       //draw fish body
-    ellipse(0,0, 25 * this.scale, 10 * this.scale); // Increased width from 20 to 25
+    ellipse(0,0, 25 * scale, 10 * scale); // Increased width from 20 to 25
     //draw fish tail
     beginShape();
-    vertex(-15 * this.scale, 0); // Adjusted vertex coordinate from -10 to -15
-    vertex(-25 * this.scale, 5 * this.scale); // Adjusted vertex coordinate from -20 to -25
-    vertex(-25 * this.scale, -5 * this.scale); // Adjusted vertex coordinate from -20 to -25
+    vertex(-15 * scale, 0); // Adjusted vertex coordinate from -10 to -15
+    vertex(-25 * scale, 5 * scale); // Adjusted vertex coordinate from -20 to -25
+    vertex(-25 * scale, -5 * scale); // Adjusted vertex coordinate from -20 to -25
     endShape(CLOSE);
     //draw fish eye
-    strokeWeight(5 + 0.5 * this.scale);
+    strokeWeight(5 + 0.5 * scale);
     stroke(40);
-    point(12* this.scale,-4);
+    point(12* scale,-4);
     pop();
     }
 
