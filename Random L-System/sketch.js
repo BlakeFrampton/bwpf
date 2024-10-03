@@ -71,10 +71,6 @@ function draw() {
   printShape(axiom);
 }
 
-function mouseClicked(){
-  generateShape();
-}
-
 function touchStarted(){
   generateShape();
 }
