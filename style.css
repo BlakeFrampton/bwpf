@@ -10,6 +10,14 @@ body {
   padding-top: 50px;
   font-family: 'Lexend Deca', sans-serif; 
   color: #2E475D;    
+  /*Stop side scrolling on mobile*/
+  width: 100vw;
+  overflow-x: hidden;
+}
+
+/* Disable pull to refresh*/
+html, body {
+  overscroll-behavior: none;
 }
 
 main {
