@@ -7,15 +7,11 @@ canvas {
   display: block;
 }
 
-/*pause and resume button*/
-/* #playpause {
-  width:0;
-  height:0;
-  text-align:center;
-  font-size: 30pt;
-  border:none;
-  background:transparent;
-} */
+/*stop vertical scrolling*/
+body {
+  max-height: 100vh;
+  overflow-y: hidden;
+}
 
 
 /*restart button */
