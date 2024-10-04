@@ -2,6 +2,8 @@ class player{
   maxSpeed = 6;
   ColourMultiplier = 1;
   shrinkMult = 1;
+  boosting = false;
+  latestTap = 0;
 
     constructor(){
       this.position= createVector(0 , 0);
@@ -33,6 +35,7 @@ class player{
       if (this.alive || this.hunger == 0) {
       this.velocity.add(this.acceleration);
       this.velocity.limit(this.maxSpeed + 1 / max(controller.score, 1)); //max avoids dividing by 0
+      this.boostCheck();
       this.boost();
       this.position.add(this.velocity);
       }
@@ -50,13 +53,38 @@ class player{
       controller.restartButton.position(width/2 -60,height/2);
     }
 
-    //spend hunger to go extra fast when space bar or mouse held
+
+    //check boost for PC
+    boostCheck(){
+      if (!isMobileDevice){
+        if (keyIsDown(32) || mouseIsPressed){
+          this.boosting =true;
+        }else{
+          this.boosting = false;
+        }
+      }
+    }
+
+
+    doubletapCheck() {
+      var now = new Date().getTime();
+      var timesince = now - this.latestTap;
+      if((timesince < 600) && (timesince > 0)){
+        console.log("Double tap");
+        this.boosting = true;
+        this.boost();   
+      }else{
+          this.boosting =false;
+      }
+      this.latestTap = new Date().getTime();
+    }
+
+    //spend hunger to increase speed
     boost(){
-      if (keyIsDown(32) || mouseIsPressed){
-        console.log("boosting");
-        this.hunger -= 0.003;
-        this.velocity.mult(1.3);
-        this.hunger = max(0,this.hunger);
+      if (this.boosting == true){
+      this.hunger -= 0.003;
+      this.velocity.mult(1.3);
+      this.hunger = max(0,this.hunger);
       }
     }
 

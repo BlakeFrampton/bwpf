@@ -4,9 +4,21 @@ let effects = [];
 let controller;
 let pauseButton;
 let paused = false;
+let isMobileDevice = false;
 
 
 function setup() {
+  /* Storing user's device details in a variable*/
+  let details = navigator.userAgent;
+
+  /* Creating a regular expression 
+  containing some mobile devices keywords 
+  to search it in details string*/
+  let regexp = /android|iphone|kindle|ipad/i;
+
+  /* Using test() method to search regexp in details
+  it returns boolean value*/
+  isMobileDevice = regexp.test(details);
   frameRate(60);
   angleMode(RADIANS);
   const width  = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
@@ -100,3 +112,13 @@ function updateZoom(controller){
     controller.zoom = controller.targetZoom;
   }
 }
+
+  function touchStarted(){
+    if (isMobileDevice){
+    shark.doubletapCheck();
+    }
+  }
+
+  function touchEnded(){
+    shark.boosting =false;
+  }
