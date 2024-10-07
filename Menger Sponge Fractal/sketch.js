@@ -11,7 +11,7 @@ function setup() {
   const height = window.innerHeight|| document.documentElement.clientHeight|| document.body.clientHeight;
   createCanvas(width , height, WEBGL);
   fill(170);
-  LayersSlider = createSlider(1, 4, 2, 1);
+  LayersSlider = createSlider(1, 3, 2, 1);
   LayersSlider.position(width - 140, 40);
   let LayersLabel = createSpan('Layers');
   LayersLabel.position(width-95, 20);
