@@ -81,7 +81,11 @@ function mousePressed() {
   }
 
   if (!selectedSquare) {
-    squares.push(new Square(mouseX - 25, mouseY - 25, 50));
+    let newSquare = new Square(mouseX - 25, mouseY - 25, 50);
+    squares.push(newSquare);
+    selectedSquare = newSquare;
+    offsetX = 25;
+    offsetY = 25;
   }
 }
 
