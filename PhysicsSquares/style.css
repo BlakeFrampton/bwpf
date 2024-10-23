@@ -7,23 +7,3 @@ html, body {
 canvas {
   display: block;
 }
-
-#bounciness-slider-container {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  display: flex;
-  align-items: center;
-  background-color: rgba(255, 255, 255, 0.8);
-  padding: 5px;
-  border-radius: 5px;
-}
-
-#bounciness-slider {
-  margin-left: 10px;
-  margin-right: 10px;
-}
-
-#bounciness-value {
-  font-weight: bold;
-}
