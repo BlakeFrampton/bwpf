@@ -81,11 +81,11 @@ function mousePressed() {
   }
 
   if (!selectedSquare) {
-    let newSquare = new Square(mouseX - 25, mouseY - 25, 50);
+    let newSquare = new Square(mouseX - 2.5, mouseY - 2.5, 5);
     squares.push(newSquare);
     selectedSquare = newSquare;
-    offsetX = 25;
-    offsetY = 25;
+    offsetX = 2.5;
+    offsetY = 2.5;
   }
 }
 
@@ -99,6 +99,7 @@ function mouseDragged() {
 function mouseReleased() {
   if (selectedSquare) {
     selectedSquare.isDragging = false;
+    selectedSquare.isNew = false;
     if (selectedSquare.previousPositions.length > 1) {
       let lastPosition = selectedSquare.previousPositions[selectedSquare.previousPositions.length - 1];
       let secondLastPosition = selectedSquare.previousPositions[selectedSquare.previousPositions.length - 2];
@@ -154,10 +155,14 @@ class Square {
     this.vy = 0;
     this.isDragging = true;
     this.previousPositions = [];
+    this.isNew = true;
   }
 
   show() {
     fill(0);
     rect(this.x, this.y, this.size, this.size);
+    if (this.isNew && this.size < 500) {
+      this.size += 1;
+    }
   }
 }
