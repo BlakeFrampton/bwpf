@@ -163,6 +163,8 @@ class Square {
     rect(this.x, this.y, this.size, this.size);
     if (this.isNew && this.size < 500) {
       this.size += 1;
+      this.x = mouseX - this.size / 2;
+      this.y = mouseY - this.size / 2;
     }
   }
 }
