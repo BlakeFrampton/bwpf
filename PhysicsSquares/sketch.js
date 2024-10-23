@@ -54,53 +54,29 @@ function draw() {
 }
 
 function mousePressed() {
-  handlePress(mouseX, mouseY);
-}
-
-function mouseDragged() {
-  handleDrag(mouseX, mouseY);
-}
-
-function mouseReleased() {
-  handleRelease();
-}
-
-function touchStarted() {
-  handlePress(touchX, touchY);
-}
-
-function touchMoved() {
-  handleDrag(touchX, touchY);
-}
-
-function touchEnded() {
-  handleRelease();
-}
-
-function handlePress(x, y) {
   for (let square of squares) {
-    if (x > square.x && x < square.x + square.size && y > square.y && y < square.y + square.size) {
+    if (mouseX > square.x && mouseX < square.x + square.size && mouseY > square.y && mouseY < square.y + square.size) {
       selectedSquare = square;
       selectedSquare.isDragging = true;
-      offsetX = x - square.x;
-      offsetY = y - square.y;
+      offsetX = mouseX - square.x;
+      offsetY = mouseY - square.y;
       break;
     }
   }
 
   if (!selectedSquare) {
-    squares.push(new Square(x, y, 50));
+    squares.push(new Square(mouseX, mouseY, 50));
   }
 }
 
-function handleDrag(x, y) {
+function mouseDragged() {
   if (selectedSquare) {
-    selectedSquare.x = x - offsetX;
-    selectedSquare.y = y - offsetY;
+    selectedSquare.x = mouseX - offsetX;
+    selectedSquare.y = mouseY - offsetY;
   }
 }
 
-function handleRelease() {
+function mouseReleased() {
   if (selectedSquare) {
     selectedSquare.isDragging = false;
     if (selectedSquare.previousPositions.length > 1) {
