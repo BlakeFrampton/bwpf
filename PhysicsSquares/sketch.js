@@ -130,9 +130,9 @@ class Square {
     this.x = x;
     this.y = y;
     this.size = size;
-    this.vx = random(-2, 2);
-    this.vy = random(-2, 2);
-    this.isDragging = false;
+    this.vx = 0;
+    this.vy = 0;
+    this.isDragging = true;
     this.previousPositions = [];
   }
 
