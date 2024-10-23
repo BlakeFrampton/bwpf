@@ -3,13 +3,19 @@ let gravity = 0.5;
 let friction = 0.99;
 let selectedSquare = null;
 let offsetX, offsetY;
+let bounciness = 0.5; // P4f07
+let bouncinessSlider; // P4f07
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
+  bouncinessSlider = createSlider(0, 2, 0.5, 0.1); // P4356
+  bouncinessSlider.position(width - 150, 30); // P4356
 }
 
 function draw() {
   background(220);
+
+  bounciness = bouncinessSlider.value(); // P74aa
 
   for (let square of squares) {
     if (!square.isDragging) {
@@ -22,18 +28,18 @@ function draw() {
 
       if (square.x + square.size > width) {
         square.x = width - square.size;
-        square.vx *= -1;
+        square.vx *= -bounciness; // Pa57a
       } else if (square.x < 0) {
         square.x = 0;
-        square.vx *= -1;
+        square.vx *= -bounciness; // Pa57a
       }
 
       if (square.y + square.size > height) {
         square.y = height - square.size;
-        square.vy *= -1;
+        square.vy *= -bounciness; // Pa57a
       } else if (square.y < 0) {
         square.y = 0;
-        square.vy *= -1;
+        square.vy *= -bounciness; // Pa57a
       }
 
       for (let other of squares) {
@@ -51,6 +57,11 @@ function draw() {
 
     square.show();
   }
+
+  // Display the current bounciness value next to the slider
+  fill(0);
+  noStroke();
+  text("Bounciness: " + bounciness.toFixed(1), width - 150, 20); // P74aa
 }
 
 function mousePressed() {
@@ -109,14 +120,14 @@ function resolveCollision(square1, square2) {
     } else {
       square1.x = square2.x - square1.size;
     }
-    square1.vx *= -1;
+    square1.vx *= -bounciness; // P2c7a
   } else {
     if (overlapY > 0) {
       square1.y = square2.y + square2.size;
     } else {
       square1.y = square2.y - square1.size;
     }
-    square1.vy *= -1;
+    square1.vy *= -bounciness; // P2c7a
   }
 
   if (square1.isDragging) {
