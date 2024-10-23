@@ -41,6 +41,12 @@ function draw() {
           resolveCollision(square, other);
         }
       }
+    } else {
+      // Record position periodically while dragging
+      square.previousPositions.push(createVector(square.x, square.y));
+      if (square.previousPositions.length > 5) {
+        square.previousPositions.shift();
+      }
     }
 
     square.show();
@@ -73,7 +79,13 @@ function mouseDragged() {
 function mouseReleased() {
   if (selectedSquare) {
     selectedSquare.isDragging = false;
-    selectedSquare.momentum = createVector(selectedSquare.vx, selectedSquare.vy);
+    if (selectedSquare.previousPositions.length > 1) {
+      let lastPosition = selectedSquare.previousPositions[selectedSquare.previousPositions.length - 1];
+      let secondLastPosition = selectedSquare.previousPositions[selectedSquare.previousPositions.length - 2];
+      selectedSquare.vx = lastPosition.x - secondLastPosition.x;
+      selectedSquare.vy = lastPosition.y - secondLastPosition.y;
+    }
+    selectedSquare.previousPositions = [];
     selectedSquare = null;
   }
 }
@@ -108,7 +120,8 @@ function resolveCollision(square1, square2) {
   }
 
   if (square1.isDragging) {
-    square2.momentum.add(square1.momentum);
+    square2.vx += square1.vx;
+    square2.vy += square1.vy;
   }
 }
 
@@ -120,7 +133,7 @@ class Square {
     this.vx = random(-2, 2);
     this.vy = random(-2, 2);
     this.isDragging = false;
-    this.momentum = createVector(0, 0);
+    this.previousPositions = [];
   }
 
   show() {
