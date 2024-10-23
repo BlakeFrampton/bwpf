@@ -81,7 +81,7 @@ function mousePressed() {
   }
 
   if (!selectedSquare) {
-    squares.push(new Square(mouseX, mouseY, 50));
+    squares.push(new Square(mouseX - 25, mouseY - 25, 50));
   }
 }
 
