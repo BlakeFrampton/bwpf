@@ -116,7 +116,7 @@ function isColliding(square1, square2) {
     square1.x < square2.x + square2.size &&
     square1.x + square1.size > square2.x &&
     square1.y < square2.y + square2.size &&
-    square1.y + square2.size > square2.y
+    square1.y + square1.size > square2.y
   );
 }
 
