@@ -73,6 +73,7 @@ function mouseDragged() {
 function mouseReleased() {
   if (selectedSquare) {
     selectedSquare.isDragging = false;
+    selectedSquare.momentum = createVector(selectedSquare.vx, selectedSquare.vy);
     selectedSquare = null;
   }
 }
@@ -105,6 +106,10 @@ function resolveCollision(square1, square2) {
     }
     square1.vy *= -1;
   }
+
+  if (square1.isDragging) {
+    square2.momentum.add(square1.momentum);
+  }
 }
 
 class Square {
@@ -115,6 +120,7 @@ class Square {
     this.vx = random(-2, 2);
     this.vy = random(-2, 2);
     this.isDragging = false;
+    this.momentum = createVector(0, 0);
   }
 
   show() {
