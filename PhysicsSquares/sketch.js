@@ -90,7 +90,7 @@ function mousePressed() {
 }
 
 function mouseDragged() {
-  if (selectedSquare) {
+  if (selectedSquare && !selectedSquare.isNew) {
     selectedSquare.x = mouseX - offsetX;
     selectedSquare.y = mouseY - offsetY;
   }
