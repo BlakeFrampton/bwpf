@@ -1,6 +1,6 @@
 const clientId = "410a67665b04443db7546c753f8d6b53";
 // const redirectUri = "http://" + window.location.host + "/Shufflefy"; // Redirects to the same page after login
-const redirectUri = "https://127.0.0.1:5500/Shufflefy"
+const redirectUri = "https://dev.bwpf.co.uk/Shufflefy/"
 
 const generateRandomString = (length) => {
     const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
