@@ -58,6 +58,11 @@ console.log(code);
 
 const getToken = async code => {
 
+    if (!code) {
+        console.log("No authorization code available.");
+        return;
+    }
+
     // stored in the previous step
     let codeVerifier = localStorage.getItem('code_verifier');
   
@@ -75,11 +80,20 @@ const getToken = async code => {
       }),
     }
   
-    const body = await fetch(URL, payload);
-    const response =await body.json();
+    // const body = await fetch(URL, payload);
+    // const response =await body.json();
   
-    localStorage.setItem('access_token', response.access_token);
-    initializeSpotifyPlayer(response.access_token);
+    // localStorage.setItem('access_token', response.access_token);
+    // initializeSpotifyPlayer(response.access_token);
+    const response = await fetch("https://accounts.spotify.com/api/token", payload);
+    const data = await response.json();
+
+    if (response.ok) {
+        localStorage.setItem('access_token', data.access_token);
+        console.log("Token received and stored");
+    } else {
+        console.error("Error retrieving token:", data);
+    }
   }
 
 if (code) {
