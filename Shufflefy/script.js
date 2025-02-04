@@ -55,10 +55,6 @@ let code = urlParams.get('code');
 
 console.log("URL Parameters:", window.location.search);
 
-if (code) {
-    getToken(code);
-}
-
 const getToken = async code => {
 
     // stored in the previous step
@@ -84,6 +80,10 @@ const getToken = async code => {
     localStorage.setItem('access_token', response.access_token);
     initializeSpotifyPlayer(response.access_token);
   }
+
+if (code) {
+    getToken(code);
+}
 
 const accessToken = localStorage.getItem('access_token');
 
