@@ -98,6 +98,8 @@ const getToken = async code => {
 
 if (code) {
     getToken(code);
+} else{
+    console.log("no code");
 }
 
 const accessToken = localStorage.getItem('access_token');
