@@ -54,6 +54,7 @@ const urlParams = new URLSearchParams(window.location.search);
 let code = urlParams.get('code');
 
 console.log("URL Parameters:", window.location.search);
+console.log(code);
 
 const getToken = async code => {
 
