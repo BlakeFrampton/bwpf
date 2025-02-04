@@ -6,6 +6,8 @@ const port = 3000;
 // Spotify credentials
 // const clientId = '410a67665b04443db7546c753f8d6b53';
 const clientSecret = '4ff294095a94409880ded0c68b18bef8';
+alert(clientId)
+
 
 // To store the access token temporarily (you can improve this with a proper OAuth flow later)
 let accessToken = '';
