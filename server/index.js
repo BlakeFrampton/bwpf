@@ -1,13 +1,22 @@
-const express = require('express');
+const express = require("express");
+const cors = require("cors");
+const path = require("path");
+
 const app = express();
-const cors = require('cors');
+app.use(cors());
 
-app.use(cors())
+// Serve static files from the "public" folder
+app.use(express.static(path.join(__dirname, "public")));
 
-app.get('/', (req, res) => {
-      res.send('Hello from our server!')
-})
+// Example API route
+app.get("/", (req, res) => {
+  res.json({ message: "Hello from the backend!" });
+});
 
-app.listen(8080, () => {
-      console.log('server listening on port 8080')
-})
+// Serve index.html for all unknown routes (useful for SPAs)
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
+
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
