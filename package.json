@@ -1,0 +1,14 @@
+{
+    "name": "my-project",
+    "version": "1.0.0",
+    "scripts": {
+      "dev": "concurrently \"npm run server\" \"npm run client\"",
+      "client": "npm run start --prefix client",
+      "server": "node server/server.js"
+    },
+    "dependencies": {
+      "concurrently": "^6.0.0",
+      "express": "^4.0.0"
+    }
+  }
+  

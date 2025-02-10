@@ -1,26 +1,20 @@
-// import axios from 'axios';
 import './App.css';
+import {Routes, Route, BrowserRouter } from 'react-router-dom';
+import TestApp from "./apps/TestApp";
+import SpotifyApp from "./apps/SpotifyApp"
 
-//data will be the string we send from our server
-// const apiCall = async () => {
-//   try {
-//     const response = await axios.get("http://localhost:8080/"); // Make sure this URL is correct
-//     console.log(response.data);
-//   } catch (error) {
-//     console.error("Error fetching data:", error);
-//   }
-// };
-
-function App() {
+export default function App() {
   return (
-    <div className="App">
-      {/* <header className="App-header">
-
-        <button onClick={apiCall}>Make API Call</button>
-
-      </header> */}
+    <div>
+      <BrowserRouter>
+      <Routes>
+      <Route path="/projects/Shufflefy" exact element={<SpotifyApp />} />
+      <Route path="/projects/Shufflefy/" exact element={<SpotifyApp />} />
+        <Route path="/projects/Shufflefy/*" exact element={<SpotifyApp />} />
+        <Route path="/" element={<TestApp />} />
+        <Route path="*" element={<h1>Page not found</h1>} />
+      </Routes>
+      </BrowserRouter>
     </div>
   );
 }
-
-export default App;
