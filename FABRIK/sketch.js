@@ -105,7 +105,8 @@ function spawnJoints(){
 }
 
 function getJointLength(i){
-  return startingLength * Math.pow(lengthScale, i);
+  let length = startingLength * Math.pow(lengthScale, i)
+  return Math.min(length, 1000);
 }
 
 
