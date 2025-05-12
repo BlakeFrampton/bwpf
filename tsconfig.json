@@ -1,16 +1,17 @@
 {
   "compilerOptions": {
-    "target": "es2015",                // Use ES2015 features like Set, Map, etc.
-    "lib": ["es2015", "dom"],          // Include DOM types for browser support
-    "module": "esnext",                // Modern module system (can use "commonjs" if using Node)
-    "outDir": "falling-sand",          // Output folder for compiled JS
-    "rootDir": "falling-sand",                    // Root of your source files
-    "strict": true,                    // Enable all strict type-checking options
-    "esModuleInterop": true,          // Allow compatibility with CommonJS modules
+    "target": "es2015",
+    "lib": ["es2015", "dom"],
+    "module": "none",
+    "outFile": "falling-sand/sketch.js",
+    "rootDir": ".",
+    "strict": true,
+    "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
-    
+    "types": ["p5"]
   },
-  "include": ["falling-sand/**/*.ts"],  // Only include your TypeScript files
-  "exclude": ["node_modules"]           // Ignore dependencies
+  "include": [
+    "**/*.ts"
+  ]
 }

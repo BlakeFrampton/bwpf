@@ -21,6 +21,7 @@
         "@types/p5": "^1.7.6"
     },
     "dependencies": {
+        "p5": "^2.0.1",
         "tsc": "^2.0.4",
         "typescript": "^5.8.3"
     }

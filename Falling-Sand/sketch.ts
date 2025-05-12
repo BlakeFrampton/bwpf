@@ -18,8 +18,8 @@ type Tile = {
   buried: boolean;
 }
 
-const radius: number = 25;
-const tileSize: number = 1;
+let radius: number = 5;
+let tileSize: number = 5;
 
 let sandHue: number = 1;
 let gridWidth: number = 0;
@@ -27,16 +27,30 @@ let gridHeight: number = 0;
 let grid: Tile[][] = [];
 let activeTiles = new Set<Coordinate>();
 
-
+let tileSizeSlider: any;
+let sandBrushRadiusSlider: any;
 
 function setup() {
   angleMode(RADIANS);
   const width  = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
   const height = window.innerHeight|| document.documentElement.clientHeight|| document.body.clientHeight;
   createCanvas(width, height);
+  strokeWeight(0);
 
   gridWidth = Math.floor(width / tileSize);
   gridHeight = Math.floor(height / tileSize);
+
+  tileSizeSlider = createSlider(1, 10, 5, 0.5);
+  sandBrushRadiusSlider = createSlider(1, 25, 5, 1);
+
+  let tileSizeLabel = createSpan('Tile Size');
+  tileSizeLabel.position(width-115, 20);
+  tileSizeSlider.position(width - 150, 40);
+
+  let sandBrushRadiusLabel = createSpan('Sand Brush Radius');
+  sandBrushRadiusLabel.position(width-145, 70);
+  sandBrushRadiusSlider.position(width - 150, 90);
+
 
 
   for (let i = 0; i < gridWidth; i++) {
@@ -48,9 +62,15 @@ function setup() {
 
   colorMode(HSB, 360, 100, 100); // Use hue-saturation-brightness with max hue 360
   // frameRate(60);
+
+  tileSizeSlider.input(updateTileSize);
 }
 
+
 function draw() {
+  noStroke();
+  radius = Number(sandBrushRadiusSlider.value());
+
   sandHue += 0.1;
   sandHue = (sandHue) % 360;
 
@@ -59,12 +79,33 @@ function draw() {
     updateTile(coord);
   }
 
-  // requestAnimationFrame(draw);
 }
+
+function updateTileSize(){
+  tileSize = Number(tileSizeSlider.value());
+  activeTiles = new Set();
+
+  const width  = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+  const height = window.innerHeight|| document.documentElement.clientHeight|| document.body.clientHeight;
+  strokeWeight(0);
+
+  gridWidth = Math.floor(width / tileSize);
+  gridHeight = Math.floor(height / tileSize);
+
+  grid = [];
+  for (let i = 0; i < gridWidth; i++) {
+    grid[i] = [];
+    for (let j = 0; j < gridHeight; j++) {
+      grid[i][j] = {filled: false, color: "", buried: false}
+    }
+  }
+
+  background(255);
+} 
 
 function drawGrid(){
   push();
-  strokeWeight(1);
+  strokeWeight(0);
   stroke(150);
   for (let col = 0; col < gridWidth; col++){
     line(col * tileSize, height, col * tileSize, 0);
@@ -161,14 +202,13 @@ function filterTile(coord: Coordinate){
 
 function drawTile(coord: Coordinate){
   push()
-  strokeWeight(0)
   let tile: Tile = grid[coord.x][coord.y];
   if (tile.filled){
     fill(tile.color);
   } else{
     fill(255);
   }
-  square(coord.x * tileSize, coord.y * tileSize + 2, tileSize);
+  square(coord.x * tileSize, coord.y * tileSize, tileSize);
   pop()
 }
 
