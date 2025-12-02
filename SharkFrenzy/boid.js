@@ -159,8 +159,12 @@ class boid{
     
     sharkCollision(flock, shark, effects, controller){
         let distance = dist(this.position.x, this.position.y, shark.position.x, shark.position.y);
-        if (distance < 20 * (1 + controller.score/70) && this.invincibilityFrames == 0 ){
-         this.destroy(flock, effects,controller, shark);
+        if (distance < 20 * (1 + controller.score/70) && this.invincibilityFrames == 0 ){  // fish eaten
+            this.destroy(flock, effects,controller, shark);
+            
+            if (shark.getSizeMult() < 3.2 * (1 + controller.orcasEaten) && shark.alive) { // if too small to eat orca, respawn fish
+                controller.spawnFish(flock)
+            }
         }
     }
 

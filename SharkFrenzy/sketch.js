@@ -32,7 +32,7 @@ function setup() {
   shark = new player;
   controller.maxFish = int(width * height / 14000 * controller.zoom);
   for (i=0; i < controller.maxFish; i++){
-  flock.push(new boid(random(-width/2 * controller.zoom, width/2 * controller.zoom), random(-height/2 * controller.zoom, height/2 * controller.zoom), 20));
+    flock.push(new boid(random(-width/2 * controller.zoom, width/2 * controller.zoom), random(-height/2 * controller.zoom, height/2 * controller.zoom), 20));
   }
   controller.fishSpawned += controller.maxFish;
 

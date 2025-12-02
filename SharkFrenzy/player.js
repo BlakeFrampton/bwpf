@@ -12,6 +12,7 @@ class player{
       this.hunger = 1;
       this.alive = true;
       this.eaten = false;
+      this.sizeMult = 0;
     }
 
     update( effects, controller, flock ){
@@ -33,11 +34,11 @@ class player{
        
       }
       if (this.alive || this.hunger == 0) {
-      this.velocity.add(this.acceleration);
-      this.velocity.limit(this.maxSpeed + 1 / max(controller.score, 1)); //max avoids dividing by 0
-      this.boostCheck();
-      this.boost();
-      this.position.add(this.velocity);
+        this.velocity.add(this.acceleration);
+        this.velocity.limit(this.maxSpeed + 1 / max(controller.score, 1)); //max avoids dividing by 0
+        this.boostCheck();
+        this.boost();
+        this.position.add(this.velocity);
       }
     }
 
@@ -89,17 +90,16 @@ class player{
     }
 
     checkPredatorCollision(effects, controller,flock){
-      let sizeMult = 1 + controller.score/150;
+      this.sizeMult = 1 + controller.score/150;
       let distance = dist(this.position.x, this.position.y, controller.orca.position.x,  controller.orca.position.y);
-      if (distance < 72* (1 + controller.orcasEaten) && sizeMult < 2.8 * (1+controller.orcasEaten) &&controller.orca.alive){
+      if (distance < 72* (1 + controller.orcasEaten) && this.sizeMult < 2.8 * (1+controller.orcasEaten) &&controller.orca.alive){
         let position = createVector(this.position.x, this.position.y);
-        effects.push(new deathEffect(position, 200 * sizeMult));
+        effects.push(new deathEffect(position, 200 * this.sizeMult));
         this.alive = false;
         this.hunger = 0;
         this.eaten = true;
         controller.restartButton.position(width/2-60,height/2);
-
-      }else if (distance< 40 * sizeMult + 120 * (1+ controller.orcasEaten)  && sizeMult > 3.2* (1+controller.orcasEaten) &&  controller.orca.alive){
+      } else if (distance < 40 * this.sizeMult + 120 * (1+ controller.orcasEaten)  && this.sizeMult > 3.2 * (1 + controller.orcasEaten) &&  controller.orca.alive){
         controller.orca.alive = false;
         let position = createVector( controller.orca.position.x,  controller.orca.position.y);
         effects.push(new deathEffect(position, 600));
@@ -128,22 +128,26 @@ class player{
         }
         stroke(100 * this.ColourMultiplier);
         fill(100* this.ColourMultiplier);
-        let sizeMult = 1 + controller.score/150
+        this.sizeMult = 1 + controller.score/150;
         stroke(160* this.ColourMultiplier);
-        strokeWeight(15 *sizeMult);
-        ellipse(-30,0, 80 * sizeMult, 24 * sizeMult); //body
+        strokeWeight(15 *this.sizeMult);
+        ellipse(-30,0, 80 * this.sizeMult, 24 * this.sizeMult); //body
 
         fill(160 * this.ColourMultiplier);
         strokeWeight(5);
         noStroke();
 
-        triangle(-30 - 35 * sizeMult, 0, -30 - 55 * sizeMult, 0,  -30 - 65 * sizeMult, 25* sizeMult); //tail
-        triangle(-30 - 35 * sizeMult, 0,  -30 - 55 * sizeMult, 0, -30 - 65 * sizeMult, -25* sizeMult); //tail
+        triangle(-30 - 35 * this.sizeMult, 0, -30 - 55 * this.sizeMult, 0,  -30 - 65 * this.sizeMult, 25* this.sizeMult); //tail
+        triangle(-30 - 35 * this.sizeMult, 0,  -30 - 55 * this.sizeMult, 0, -30 - 65 * this.sizeMult, -25* this.sizeMult); //tail
 
-        triangle(-70 * sizeMult/3 -20, 18 * sizeMult, -20,16 * sizeMult, -70 * sizeMult/3 -20, 35 * sizeMult); //fin
-        triangle(-70 * sizeMult/3 -20, -18 * sizeMult,-20 ,-16 * sizeMult, -70 * sizeMult/3 -20, -35 * sizeMult); //fin
+        triangle(-70 * this.sizeMult/3 -20, 18 * this.sizeMult, -20,16 * this.sizeMult, -70 * this.sizeMult/3 -20, 35 * this.sizeMult); //fin
+        triangle(-70 * this.sizeMult/3 -20, -18 * this.sizeMult,-20 ,-16 * this.sizeMult, -70 * this.sizeMult/3 -20, -35 * this.sizeMult); //fin
 
         pop();
       }
+    }
+
+    getSizeMult(){
+      return this.sizeMult;
     }
 }

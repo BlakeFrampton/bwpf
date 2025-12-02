@@ -45,6 +45,7 @@ class gameController{
             this.spawnFish(flock);
         }
     }
+
     restart(){
         location.reload();
     }
