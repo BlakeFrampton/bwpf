@@ -16,6 +16,7 @@ class boid{
         this.perceptionRadius = 100;
         this.maxForce = 0.5;
         this.scale = 1;
+        this.separationFactor = 1;
 
         let rndInt = int(random(1,75));
         if (rndInt == 1){
@@ -42,6 +43,11 @@ class boid{
             this.perceptionRadius = 50;
             this.scale = 0.5;
             this.points = 15;
+        } else if (rndInt == 4){
+            this.colour = "red";
+            this.maxVelocity = 5;
+            this.maxForce = 1;
+            this.separationFactor = 10;
         }
     }
 
@@ -101,8 +107,9 @@ class boid{
                 currentForce = p5.Vector.sub(this.position, other.position);
                 let distance = dist(this.position.x, this.position.y, other.position.x, other.position.y)
                 if (distance > 0){
-                currentForce.div(pow(distance, 2));
+                    currentForce.div(pow(distance, 2));
                 }
+                currentForce.mult(this.separationFactor)
                 force.add(currentForce);
             }
         if (NumOfLocals > 0){
@@ -157,9 +164,12 @@ class boid{
         return force;
     }
     
-    sharkCollision(flock, shark, effects, controller){
+    sharkCollision(flock, shark, effects, controller){ // Player eats fish
         let distance = dist(this.position.x, this.position.y, shark.position.x, shark.position.y);
         if (distance < 20 * (1 + controller.score/70) && this.invincibilityFrames == 0 ){  // fish eaten
+            if (this.colour == "red") {
+                shark.redFishBoost();
+            }
             this.destroy(flock, effects,controller, shark);
             
             if (shark.getSizeMult() < 3.2 * (1 + controller.orcasEaten) && shark.alive) { // if too small to eat orca, respawn fish
@@ -214,6 +224,9 @@ class boid{
         }else if(this.colour == "purple"){
             stroke(150, 0, 150);
             fill(150, 0, 150);
+        }else if(this.colour == "red"){
+            stroke(200, 0, 0)
+            fill(100,0,0)
         }
 
         let scale = this.scale * 0.7;

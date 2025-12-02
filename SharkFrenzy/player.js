@@ -13,6 +13,8 @@ class player{
       this.alive = true;
       this.eaten = false;
       this.sizeMult = 0;
+      this.boostDuration = 0;
+      this.redFishBoostMult = 2;
     }
 
     update( effects, controller, flock ){
@@ -35,7 +37,14 @@ class player{
       }
       if (this.alive || this.hunger == 0) {
         this.velocity.add(this.acceleration);
-        this.velocity.limit(this.maxSpeed + 1 / max(controller.score, 1)); //max avoids dividing by 0
+
+        if (this.boostDuration > 0) {
+          this.boostDuration -= 1;
+          this.velocity.limit(this.maxSpeed * this.redFishBoostMult + 1 / max(controller.score, 1)); //max avoids dividing by 0
+        } else {
+          this.velocity.limit(this.maxSpeed + 1 / max(controller.score, 1)); //max avoids dividing by 0
+        }
+
         this.boostCheck();
         this.boost();
         this.position.add(this.velocity);
@@ -87,6 +96,11 @@ class player{
       this.velocity.mult(1.3);
       this.hunger = max(0,this.hunger);
       }
+    }
+
+    redFishBoost(){
+      console.log("boost")
+      this.boostDuration = 60 * 1; // 4 seconds
     }
 
     checkPredatorCollision(effects, controller,flock){
