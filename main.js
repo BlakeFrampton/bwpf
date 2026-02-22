@@ -1,6 +1,5 @@
 import * as THREE from "https://cdn.skypack.dev/three@0.129.0/build/three.module.js";
 import {OrbitControls} from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/controls/OrbitControls.js"
-import {GLTFLoader} from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/GLTFLoader.js"
 
 const scene = new THREE.Scene();
 
@@ -14,11 +13,6 @@ renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
 
 initialiseLights();
-
-//remove from here to...
-// const gridHelper = new THREE.GridHelper(200, 50);
-// scene.add( gridHelper);s
-//...here for release versions. These are debugging tools
 
 const controls = new OrbitControls(camera, renderer.domElement);
 
@@ -99,9 +93,6 @@ function initialiseLights(){
     const ambientLight = new THREE.AmbientLight(0xffffff);
     pointLight.position.set(5, 5 ,5);
     scene.add(pointLight, ambientLight);
-
-    //const lightHelper = new THREE.PointLightHelper(pointLight);//to be removed in release
-    //scene.add(lightHelper);                                    //debugging tool
 }
 
 
